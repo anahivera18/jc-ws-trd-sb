@@ -1,9 +1,11 @@
 require('dotenv').config({ path: '../.env' });
 
+const express = require('express');
 const connectDB = require('./db'); 
 
 const MONGO_URI = process.env.MONGO_URI; 
 const PORT = process.env.PORT || 5000;
+const app = express();
 
 const iniciaApp = async () => {
     
@@ -14,7 +16,13 @@ const iniciaApp = async () => {
 
     await connectDB(MONGO_URI); 
 
-    console.log(`Servidor iniciando en http://localhost:${PORT}`);
+    app.get('/', (req, res) => {
+        res.send('<h1> Servidor Express Funcionando</h1><p>Conexión a MongoDB exitosa.</p>');
+    });
+
+    app.listen(PORT, () => {
+        console.log(`Servidor Express en: http://localhost:${PORT}`);
+    });
 };
 
 iniciaApp(); 
