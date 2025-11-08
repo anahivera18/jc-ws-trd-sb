@@ -1,6 +1,6 @@
 
-const Game = require('../models/Game');
-const Review = require('../models/Review');
+const Game = require('../modelos/game');
+const Review = require('../modelos/Review');
 
 exports.list = async (req, res) => {
   try {

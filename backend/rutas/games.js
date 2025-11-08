@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/gamesController');
+const ctrl = require('../controladores/ControladorGame');
 
 router.get('/', ctrl.list);
 router.get('/stats', ctrl.stats);

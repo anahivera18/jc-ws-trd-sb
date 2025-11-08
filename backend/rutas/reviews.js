@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/reviewsController');
+const ctrl = require('../controladores/ControladorReview');
 
 router.get('/:gameId', ctrl.listByGame);
 router.post('/:gameId', ctrl.create);

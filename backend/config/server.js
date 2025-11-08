@@ -1,28 +1,29 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../.env' }); 
 
 const express = require('express');
+const cors = require('cors');
+
 const connectDB = require('./db'); 
 
-const MONGO_URI = process.env.MONGO_URI; 
-const PORT = process.env.PORT || 5000;
 const app = express();
+app.use(cors()); 
+app.use(express.json()); 
 
-const iniciaApp = async () => {
-    
-    if (!MONGO_URI) {
-        console.error('Error: La variable MONGO_URI no se cargó.');
-        process.exit(1);
-    }
+const mongoUri = process.env.MONGO_URI; 
+const PORT = process.env.PORT || 5000;
 
-    await connectDB(MONGO_URI); 
+if (!mongoUri) {
+    console.error('Error: La variable MONGO_URI no se cargó.');
+    process.exit(1);
+}
 
-    app.get('/', (req, res) => {
-        res.send('<h1> Servidor Express Funcionando</h1><p>Conexión a MongoDB exitosa.</p>');
-    });
+connectDB(mongoUri);
 
-    app.listen(PORT, () => {
-        console.log(`Servidor Express en: http://localhost:${PORT}`);
-    });
-};
+app.use('/api/games', require('../rutas/games'));
+app.use('/api/reviews', require('../rutas/reviews'));
 
-iniciaApp(); 
+app.get('/', (req, res) => {
+    res.send('<h1>Servidor Express Funcionando!</h1><p>Conexión a MongoDB establecida. API lista.</p>');
+});
+
+app.listen(PORT, () => console.log(` Servidor Express escuchando en http://localhost:${PORT}`));
