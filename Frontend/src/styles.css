@@ -2,18 +2,26 @@
   --bg:#f4f2fa; --primary:#6a11cb; --accent:#ff8a00; --card:#fff;
 }
 html,body,#root{height:100%;}
+
 body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--bg);color:#222}
+
 .app-root .container{max-width:1100px;margin:24px auto;padding:0 16px}
+
 .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px;background:linear-gradient(135deg,#6a11cb,#2575fc);color:#fff;border-radius:8px}
 .site-header h1{margin:0}
 .site-header .nav-link{margin-left:12px;color:rgba(255,255,255,0.95);text-decoration:none}
+
 .btn-toggle{background:rgba(255,255,255,0.12);color:#fff;border:0;padding:8px 10px;border-radius:6px;cursor:pointer}
+
 .controls{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:16px 0}
 .controls input{padding:8px;border-radius:6px;border:1px solid #ddd}
 .controls select{padding:8px;border-radius:6px;border:1px solid #ddd}
+
 .btn-primary{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
 .btn-secondary{background:#ddd;color:#333;border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
+
 .grid-juegos{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+
 .card-juego{display:flex;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.05)}
 .card-left img{width:160px;height:160px;object-fit:cover}
 .card-body{padding:12px;flex:1}
@@ -22,14 +30,25 @@ body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "
 .card-body .meta{font-size:13px;color:#777;margin-bottom:8px}
 .card-body .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .card-body .rating{margin-top:10px;font-weight:600}
+
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4)}
+
 .form{background:#fff;padding:16px;border-radius:8px;min-width:320px}
 .form input{width:100%;margin:8px 0;padding:8px;border-radius:6px;border:1px solid #ddd}
 .form-actions{display:flex;justify-content:flex-end;gap:8px}
+
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:12px}
 .stat-card{background:#fff;padding:16px;border-radius:8px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,0.04)}
 .stat-value{font-size:1.8rem;font-weight:700}
+
 .site-footer{padding:16px;text-align:center;margin:24px 0;color:#555}
+
 .dark{background:#0f1724;color:#e6eef8}
 .dark .site-header{background:linear-gradient(135deg,#111827,#0b1220)}
 .dark .card-juego, .dark .form, .dark .stat-card{background:#0b1220;color:#e6eef8;border:1px solid rgba(255,255,255,0.04)}
+
+.menu {display: flex;gap: 20px;padding: 20px;background: #6a11cb;}
+.btn-menu {color: white;background: #2575fc;padding: 10px 20px;border-radius: 8px;text-decoration: none;font-weight: bold;}
+.btn-menu:hover {background: #1a5ed8;}
+.btn-agregar {background: #28a745;color: white;padding: 10px 15px;border-radius: 8px;
+}

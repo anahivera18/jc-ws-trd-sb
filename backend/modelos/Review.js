@@ -1,12 +1,12 @@
 
 const mongoose = require('mongoose');
 
-const ReviewSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
   game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
-  author: { type: String, default: 'Anónimo' },
-  stars: { type: Number, min: 0, max: 5, required: true },
-  content: { type: String },
-  createdAt: { type: Date, default: Date.now }
+  user: String,
+  content: String,
+  rating: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Review', ReviewSchema);
+module.exports = mongoose.model('Review', reviewSchema);
