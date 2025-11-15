@@ -1,100 +1,106 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import TarjetaJuego from "../components/TarjetaJuego";
-import FormularioJuego from "../components/FormularioJuego";
-import { games, reviews } from "../src/api";
+import { games } from "../api";
+import TarjetaJuego from "./TarjetaJuego";
+import FormularioJuego from "./FormularioJuego";
 
-const API = process.env.REACT_APP_API_URL;
-export default function BibliotecaJuegos() {
- const [juegos, setJuegos] = useState([]);
- const [mostrarFormulario, setMostrarFormulario] = useState(false);
- const [juegoSeleccionado, setJuegoSeleccionado] = useState(null);
- // ================================
- // Cargar juegos desde el backend
- // ================================
- const cargarJuegos = async () => {
- try {
- const res = await axios.get(`${API}/games`);
- setJuegos(res.data);
- } catch (error) {
- console.error("Error al cargar juegos:", error);
- }
- };
- useEffect(() => {
- cargarJuegos();
- }, []);
- // ================================
- // Crear o actualizar un juego
- // ================================
- const guardarJuego = async (datos) => {
- try {
- if (juegoSeleccionado) {
- // EDITAR
- await axios.put(`${API}/games/${juegoSeleccionado._id}`, datos);
- } else {
- // CREAR
- await axios.post(`${API}/games`, datos);
- }
- cargarJuegos();
- cerrarFormulario();
- } catch (error) {
- console.error("Error al guardar:", error);
- }
- };
- // ================================
- // Eliminar juego
- // ================================
- const eliminarJuego = async (id) => {
- try {
- await axios.delete(`${API}/games/${id}`);
- cargarJuegos();
- } catch (error) {
- console.error("Error al eliminar:", error);
- }
- };
- // ================================
- // Abrir formulario para editar
- // ================================
- const editarJuego = (juego) => {
- setJuegoSeleccionado(juego);
- setMostrarFormulario(true);
- };
- // Cerrar formulario
- const cerrarFormulario = () => {
- setJuegoSeleccionado(null);
- setMostrarFormulario(false);
- };
- return (
- <div className="container mx-auto p-6">
- <h1 className="text-4xl font-bold text-purple-700 mb-6">
- Tu Biblioteca de Juegos
- </h1>
- {/* BOTÓN */}
- <button
- onClick={() => setMostrarFormulario(true)}
- className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
- >
- Agregar juego
- </button>
- {/* FORMULARIO */}
- {mostrarFormulario && (
- <FormularioJuego
- juego={juegoSeleccionado}
- onSave={guardarJuego}
- onCancel={cerrarFormulario}
- />
- )}
- {/* LISTADO DE JUEGOS */}
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
- {juegos.map((j) => (
- <TarjetaJuego
- key={j._id}
- juego={j}
- onDelete={() => eliminarJuego(j._id)}
- onEdit={() => editarJuego(j)}
- />
- ))}
- </div>
- </div>
- );
+export default function BibliotecaJuegos(){
+  const [juegos, setJuegos] = useState([]);
+  const [q, setQ] = useState("");
+  const [filtro, setFiltro] = useState({ genre: "", platform: "", status: "" });
+  const [orden, setOrden] = useState("");
+  const [editing, setEditing] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const fetchGames = async () => {
+    setLoading(true);
+    try {
+      const data = await games.list(q);
+      setJuegos(data);
+    } catch (err) {
+      console.error(err);
+      alert("Error al cargar juegos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchGames(); }, [q]);
+
+  const handleUpdateLocal = (updated) => {
+    setJuegos(prev => prev.map(j => j._id === updated._id ? updated : j));
+  };
+
+  const handleRemoveLocal = (id) => {
+    setJuegos(prev => prev.filter(j => j._id !== id));
+  };
+
+  const filtered = juegos.filter(j =>
+    (filtro.genre === "" || (j.genre || "").toLowerCase() === filtro.genre.toLowerCase()) &&
+    (filtro.platform === "" || (j.platform || "").toLowerCase() === filtro.platform.toLowerCase()) &&
+    (filtro.status === "" || (j.status || "").toLowerCase() === filtro.status.toLowerCase())
+  );
+
+  const sorted = [...filtered].sort((a,b) => {
+    if (orden === "az") return a.title.localeCompare(b.title);
+    if (orden === "rating") return (b.rating||0) - (a.rating||0);
+    if (orden === "hours") return (b.hoursPlayed||0) - (a.hoursPlayed||0);
+    return 0;
+  });
+
+  return (
+    <div>
+      <div className="controls">
+        <div className="left-controls">
+          <input placeholder="Buscar..." value={q} onChange={e=>setQ(e.target.value)} />
+          <select onChange={e=>setFiltro({...filtro, genre: e.target.value})} value={filtro.genre}>
+            <option value="">Género</option>
+            <option value="Aventura">Aventura</option>
+            <option value="Shooter">Shooter</option>
+            <option value="RPG">RPG</option>
+            <option value="Estrategia">Estrategia</option>
+          </select>
+          <select onChange={e=>setFiltro({...filtro, platform: e.target.value})} value={filtro.platform}>
+            <option value="">Plataforma</option>
+            <option value="PC">PC</option>
+            <option value="PlayStation 5">PlayStation 5</option>
+            <option value="Xbox Series X">Xbox Series X</option>
+            <option value="Nintendo Switch">Nintendo Switch</option>
+          </select>
+          <select onChange={e=>setFiltro({...filtro, status: e.target.value})} value={filtro.status}>
+            <option value="">Estado</option>
+            <option value="completado">Completado</option>
+            <option value="en-progreso">En progreso</option>
+          </select>
+        </div>
+
+        <div className="right-controls">
+          <select onChange={e=>setOrden(e.target.value)} value={orden}>
+            <option value="">Ordenar</option>
+            <option value="az">A–Z</option>
+            <option value="rating">Calificación</option>
+            <option value="hours">Horas jugadas</option>
+          </select>
+          <button onClick={()=>{ setEditing(null); setShowForm(true); }} className="btn-primary">Agregar Juego</button>
+        </div>
+      </div>
+
+      {showForm && <FormularioJuego onClose={()=>{ setShowForm(false); fetchGames(); }} editing={editing} />}
+
+      {loading ? <p>Cargando...</p> :
+        <div className="grid-juegos">
+          {sorted.map(j => (
+            <TarjetaJuego
+              key={j._id}
+              juego={j}
+              onUpdated={handleUpdateLocal}
+              onRemoved={handleRemoveLocal}
+              onEdit={(game)=>{ setEditing(game); setShowForm(true); }}
+            />
+          ))}
+          {sorted.length === 0 && <p>No hay juegos que coincidan.</p>}
+        </div>
+      }
+    </div>
+  );
 }
