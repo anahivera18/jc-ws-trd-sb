@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>GameTracker - Biblioteca</title>
+ <style>
+ :root {
+ --lila-claro: #d8bfd8;
+ --lila-medio: #c9a0dc;
+ --lila-oscuro: #b19cd9;
+ --lila-suave: #e6e6fa;
+ --lila-intenso: #9370db;
+ --blanco: #ffffff;
+ --gris-claro: #f8f9fa;
+ --gris: #6c757d;
+ --gris-oscuro: #343a40;
+ --exito: #28a745;
+ --peligro: #dc3545;
+ --advertencia: #ffc107;
+ --info: #17a2b8;
+ }
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+ body {
+ background: linear-gradient(135deg, var(--lila-suave) 0%, var(--lila-claro) 100%);
+ color: var(--gris-oscuro);
+ line-height: 1.6;
+ min-height: 100vh;
+ padding: 20px;
+ }
+ .contenedor {
+ max-width: 1200px;
+ margin: 0 auto;
+ }
+ /* HEADER */
+ .header-principal {
+ background: linear-gradient(135deg, var(--lila-intenso) 0%, var(--lila-oscuro) 100%);
+ color: var(--blanco);
+ padding: 1.5rem;
+ border-radius: 15px;
+ box-shadow: 0 4px 15px rgba(147, 112, 219, 0.3);
+ margin-bottom: 2rem;
+ }
+ .navegacion-principal {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 15px;
+ }
+ .titulo-app {
+ font-size: 2.2rem;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+ .menu-navegacion {
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ }
+ .btn {
+ display: inline-block;
+ padding: 12px 24px;
+ border: none;
+ border-radius: 12px;
+ cursor: pointer;
+ text-decoration: none;
+ text-align: center;
+ font-size: 14px;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ outline: none;
+ }
+ .btn-lila {
+ background: linear-gradient(135deg, var(--lila-intenso) 0%, var(--lila-oscuro) 100%);
+ color: var(--blanco);
+ box-shadow: 0 4px 6px rgba(177, 156, 217, 0.2);
+ }
+ .btn-lila:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 20px rgba(147, 112, 219, 0.3);
+ }
+ .btn-secundario {
+ background: var(--gris);
+ color: var(--blanco);
+ }
+ /* TARJETAS DE JUEGOS - DISEÑO HORIZONTAL */
+ .grid {
+ display: grid;
+ gap: 25px;
+ margin-bottom: 2rem;
+ }
+ .grid-2 {
+ grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+ }
+ .tarjeta-juego {
+ background: var(--blanco);
+ border-radius: 15px;
+ box-shadow: 0 8px 25px rgba(177, 156, 217, 0.15);
+ overflow: hidden;
+ transition: all 0.3s ease;
+ border: 2px solid var(--lila-claro);
+ display: flex;
+ }
+ .tarjeta-juego:hover {
+ transform: translateY(-8px);
+ box-shadow: 0 15px 35px rgba(147, 112, 219, 0.25);
+ }
+ /* LADO IZQUIERDO - IMAGEN */
+ .tarjeta-imagen {
+ width: 180px;
+ height: 240px;
+ object-fit: cover;
+ flex-shrink: 0;
+ }
+ /* LADO DERECHO - CONTENIDO */
+ .tarjeta-contenido {
+ flex: 1;
+ padding: 20px;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+ }
+ .tarjeta-titulo {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: var(--lila-intenso);
+ margin-bottom: 5px;
+ }
+ .tarjeta-subtitulo {
+ font-size: 1rem;
+ color: var(--gris);
+ margin-bottom: 15px;
+ font-weight: 500;
+ }
+ /* ESTRELLAS DE CALIFICACIÓN */
+ .rating-container {
+ margin-bottom: 15px;
+ }
+ .estrellas {
+ display: flex;
+ gap: 5px;
+ margin-bottom: 5px;
+ }
+ .estrella {
+ font-size: 24px;
+ color: var(--lila-claro);
+ cursor: pointer;
+ transition: all 0.2s ease;
+ }
+ .estrella.activa {
+ color: var(--advertencia);
+ }
+ .estrella:hover {
+ transform: scale(1.2);
+ }
+ .puntuacion-texto {
+ font-size: 0.9rem;
+ color: var(--gris);
+ font-weight: 500;
+ }
+ /* INFORMACIÓN DEL JUEGO */
+ .info-juego {
+ margin-bottom: 15px;
+ }
+ .info-fila {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 8px 0;
+ border-bottom: 1px solid var(--lila-suave);
+ }
+ .info-fila:last-child {
+ border-bottom: none;
+ }
+ .info-etiqueta {
+ font-weight: 600;
+ color: var(--lila-intenso);
+ font-size: 0.9rem;
+ min-width: 100px;
+ }
+ .info-valor {
+ font-weight: 500;
+ color: var(--gris-oscuro);
+ text-align: right;
+ flex: 1;
+ }
+ /* ESTADO Y BOTONES */
+ .estado-badge {
+ display: inline-block;
+ padding: 6px 12px;
+ border-radius: 15px;
+ font-size: 0.8rem;
+ font-weight: 600;
+ margin-bottom: 15px;
+ }
+ .completado {
+ background: var(--exito);
+ color: white;
+ }
+ .en-progreso {
+ background: var(--advertencia);
+ color: var(--gris-oscuro);
+ }
+ .tarjeta-acciones {
+ display: flex;
+ gap: 8px;
+ justify-content: flex-end;
+ }
+ .btn-sm {
+ padding: 8px 16px;
+ font-size: 0.8rem;
+ border-radius: 8px;
+ }
+ .btn-exito {
+ background: var(--exito);
+ color: var(--blanco);
+ }
+ .btn-peligro {
+ background: var(--peligro);
+ color: var(--blanco);
+ }
+ /* ESTADÍSTICAS */
+ .estadisticas-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 20px;
+ margin-bottom: 3rem;
+ }
+ .estadistica-card {
+ background: var(--blanco);
+ padding: 25px;
+ border-radius: 15px;
+ text-align: center;
+ box-shadow: 0 4px 15px rgba(177, 156, 217, 0.1);
+ border: 2px solid var(--lila-claro);
+ }
+ .estadistica-valor {
+ font-size: 2.5rem;
+ font-weight: 700;
+ margin-bottom: 5px;
+ }
+ .estadistica-titulo {
+ color: var(--gris);
+ font-size: 0.9rem;
+ font-weight: 600;
+ }
+ .valor-lila { color: var(--lila-intenso); }
+ .valor-exito { color: var(--exito); }
+ .valor-info { color: var(--info); }
+ .valor-advertencia { color: var(--advertencia); }
+ /* FOOTER */
+ .footer-principal {
+ background: linear-gradient(135deg, var(--lila-oscuro) 0%, var(--lila-intenso) 100%);
+ color: var(--blanco);
+ text-align: center;
+ padding: 2rem;
+ border-radius: 15px;
+ margin-top: 3rem;
+ }
+ /* RESPONSIVE */
+ @media (max-width: 768px) {
+ .navegacion-principal {
+ flex-direction: column;
+ text-align: center;
+ }
+
+ .menu-navegacion {
+ justify-content: center;
+ }
+
+ .grid-2 {
+ grid-template-columns: 1fr;
+ }
+
+ .tarjeta-juego {
+ flex-direction: column;
+ }
+
+ .tarjeta-imagen {
+ width: 100%;
+ height: 200px;
+ }
+
+ .estadisticas-grid {
+ grid-template-columns: repeat(2, 1fr);
+ }
+
+ .info-fila {
+ flex-direction: column;
+ align-items: flex-start;
+ gap: 5px;
+ }
+
+ .info-valor {
+ text-align: left;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- HEADER -->
+ <header class="header-principal">
+ <div class="contenedor">
+ <div class="navegacion-principal">
+ <h1 class="titulo-app">
+ GameTracker
+ </h1>
+ <nav class="menu-navegacion">
+ <button class="btn btn-lila"> Biblioteca</button>
+ <button class="btn btn-secundario"> Agregar Juego</button>
+ <button class="btn btn-secundario"> Reseñas</button>
+ <button class="btn btn-secundario"> Estadísticas</button>
+ </nav>
+ </div>
+ </div>
+ </header>
+ <main class="contenedor">
+ <!-- ESTADÍSTICAS RÁPIDAS -->
+ <div class="estadisticas-grid">
+ <div class="estadistica-card">
+ <div class="estadistica-valor valor-lila">6</div>
+ <div class="estadistica-titulo">JUEGOS EN BIBLIOTECA</div>
+ </div>
+ <div class="estadistica-card">
+ <div class="estadistica-valor valor-exito">3</div>
+ <div class="estadistica-titulo">JUEGOS COMPLETADOS</div>
+ </div>
+ <div class="estadistica-card">
+ <div class="estadistica-valor valor-info">245h</div>
+ <div class="estadistica-titulo">HORAS JUGADAS</div>
+ </div>
+ <div class="estadistica-card">
+ <div class="estadistica-valor valor-advertencia">4.3</div>
+ <div class="estadistica-titulo">PUNTUACIÓN PROMEDIO</div>
+ </div>
+ </div>
+ <!-- BIBLIOTECA DE JUEGOS -->
+ <h2 style="color: var(--lila-intenso); margin-bottom: 25px; font-size: 1.8rem; text-align:
+center;">
+ Tu Biblioteca de Juegos
+ </h2>
+
+ <div class="grid grid-2">
+ <!-- THE LEGEND OF ZELDA -->
+ <div class="tarjeta-juego">
+ <img src="zelda.jpg"
+ alt="The Legend of Zelda" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">The Legend of Zelda</h3>
+ <p class="tarjeta-subtitulo">Breath of the Wild</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ </div>
+ <div class="puntuacion-texto">5.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge completado">COMPLETADO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">Nintendo Switch</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Aventura</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">85 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ <!-- CALL OF DUTY: WARZONE -->
+ <div class="tarjeta-juego">
+ <img src="call.jpg"
+ alt="Call of Duty: Warzone" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">Call of Duty</h3>
+ <p class="tarjeta-subtitulo">Warzone</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella"> </span>
+ </div>
+ <div class="puntuacion-texto">4.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge en-progreso">EN PROGRESO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">PC</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Shooter</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">120 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ <!-- VALORANT -->
+ <div class="tarjeta-juego">
+ <img src="valo.jpg"
+ alt="Valorant" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">Valorant</h3>
+ <p class="tarjeta-subtitulo">Riot Games</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella"> </span>
+ <span class="estrella"> </span>
+ </div>
+ <div class="puntuacion-texto">3.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge en-progreso">EN PROGRESO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">PC</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Shooter Táctico</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">65 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ <!-- THE LAST OF US -->
+ <div class="tarjeta-juego">
+ <img src="TLOU.jpg"
+ alt="The Last of Us" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">The Last of Us</h3>
+ <p class="tarjeta-subtitulo">Part II</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ </div>
+ <div class="puntuacion-texto">5.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge completado">COMPLETADO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">PlayStation 5</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Aventura</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">45 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ <!-- MINECRAFT -->
+ <div class="tarjeta-juego">
+ <img src="MINE.JPG"
+ alt="Minecraft" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">Minecraft</h3>
+ <p class="tarjeta-subtitulo">Java Edition</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella"> </span>
+ </div>
+ <div class="puntuacion-texto">4.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge completado">COMPLETADO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">PC</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Aventura</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">16 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ <!-- FORTNITE -->
+ <div class="tarjeta-juego">
+ <img src="for.jpg"
+ alt="Fortnite" class="tarjeta-imagen">
+ <div class="tarjeta-contenido">
+ <div>
+ <h3 class="tarjeta-titulo">Fortnite</h3>
+ <p class="tarjeta-subtitulo">Battle Royale</p>
+
+ <!-- ESTRELLAS -->
+ <div class="rating-container">
+ <div class="estrellas">
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella activa"> </span>
+ <span class="estrella"> </span>
+ <span class="estrella"> </span>
+ </div>
+ <div class="puntuacion-texto">3.0 / 5.0</div>
+ </div>
+ <!-- INFORMACIÓN -->
+ <div class="info-juego">
+ <div class="info-fila">
+ <span class="info-etiqueta">Estado:</span>
+ <span class="info-valor">
+ <span class="estado-badge en-progreso">EN PROGRESO</span>
+ </span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Plataforma:</span>
+ <span class="info-valor">Multiplataforma</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Género:</span>
+ <span class="info-valor">Battle Royale</span>
+ </div>
+ <div class="info-fila">
+ <span class="info-etiqueta">Horas:</span>
+ <span class="info-valor">150 horas</span>
+ </div>
+ </div>
+ </div>
+ <!-- BOTONES -->
+ <div class="tarjeta-acciones">
+ <button class="btn btn-secundario btn-sm"> Editar</button>
+ <button class="btn btn-peligro btn-sm"> Eliminar</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </main>
+<!-- FORMULARIO PARA AGREGAR JUEGOS -->
+<div id="formulario-agregar" style="display: none;">
+ <div class="formulario-container">
+ <div class="formulario-header">
+ Agregar Nuevo Juego
+ </div>
+ <div class="formulario-body">
+ <form id="form-nuevo-juego">
+ <div class="grid-form">
+ <div class="grupo-form">
+ <label class="etiqueta-form">Título del Juego *</label>
+ <input type="text" id="titulo" class="control-form" placeholder="Ej: The Legend
+of Zelda" required>
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Subtítulo</label>
+ <input type="text" id="subtitulo" class="control-form" placeholder="Ej: Breath of
+the Wild">
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Género *</label>
+ <select id="genero" class="control-form" required>
+ <option value="">Seleccionar género</option>
+ <option value="Aventura">Aventura</option>
+ <option value="Shooter">Shooter</option>
+ <option value="RPG">RPG</option>
+ <option value="Estrategia">Estrategia</option>
+ <option value="Deportes">Deportes</option>
+ </select>
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Plataforma *</label>
+ <select id="plataforma" class="control-form" required>
+ <option value="">Seleccionar plataforma</option>
+ <option value="PC">PC</option>
+ <option value="PlayStation 5">PlayStation 5</option>
+ <option value="Xbox Series X">Xbox Series X</option>
+ <option value="Nintendo Switch">Nintendo Switch</option>
+ </select>
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Año *</label>
+ <input type="number" id="anio" class="control-form" placeholder="2023"
+min="1950" max="2030" required>
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Horas Jugadas *</label>
+ <input type="number" id="horas" class="control-form" placeholder="50"
+min="0" required>
+ </div>
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">URL de la Imagen</label>
+ <input type="url" id="imagen" class="control-form"
+placeholder="https://ejemplo.com/imagen.jpg">
+ </div>
+ <div class="grupo-form">
+ <label class="etiqueta-form">Estado</label>
+ <div style="display: flex; gap: 15px; margin-top: 8px;">
+ <label style="display: flex; align-items: center; gap: 5px;">
+ <input type="radio" name="estado" value="completado" checked>
+ <span>Completado </span>
+ </label>
+ <label style="display: flex; align-items: center; gap: 5px;">
+ <input type="radio" name="estado" value="en-progreso">
+ <span>En Progreso </span>
+ </label>
+ </div>
+ </div>
+ <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 25px;">
+ <button type="button" class="btn btn-secundario"
+onclick="ocultarFormulario()">Cancelar</button>
+ <button type="submit" class="btn btn-lila">Agregar Juego</button>
+ </div>
+ </form>
+ </div>
+ </div>
+</div>
+<!-- FOOTER -->
+ <footer class="footer-principal">
+ <div class="contenedor">
+ <p> GameTracker - Tu biblioteca personal de videojuegos</p>
+ <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 10px;">
+ Desarrollado con React, Node.js y MongoDB
+ </p>
+ </div>
+ </footer>
+ <script>
+ // Sistema de estrellas interactivo
+ document.querySelectorAll('.estrellas').forEach(contenedorEstrellas => {
+ const estrellas = contenedorEstrellas.querySelectorAll('.estrella');
+
+ estrellas.forEach((estrella, index) => {
+ estrella.addEventListener('click', function() {
+ // Resetear todas las estrellas
+ estrellas.forEach(e => e.classList.remove('activa'));
+
+ // Activar estrellas hasta la clickeada
+ for (let i = 0; i <= index; i++) {
+ estrellas[i].classList.add('activa');
+ }
+
+ // Actualizar texto de puntuación
+ const puntuacionTexto = contenedorEstrellas.nextElementSibling;
+ const nuevaPuntuacion = (index + 1).toFixed(1);
+ puntuacionTexto.textContent = `${nuevaPuntuacion} / 5.0`;
+
+ alert(` Calificación actualizada: ${nuevaPuntuacion} estrellas`);
+ });
+ });
+ });
+ // Efectos para botones
+ document.querySelectorAll('.btn').forEach(button => {
+ button.addEventListener('click', function() {
+ this.style.transform = 'scale(0.95)';
+ setTimeout(() => {
+ this.style.transform = '';
+ }, 150);
+
+ const texto = this.textContent;
+ if (texto.includes('Reseña')) {
+ alert(' Abriendo formulario de reseña...');
+ } else if (texto.includes('Editar')) {
+ alert(' Abriendo editor del juego...');
+ } else if (texto.includes('Eliminar')) {
+ if (confirm('¿Estás seguro de eliminar este juego?')) {
+ alert(' Juego eliminado (en la app real)');
+ }
+ }
+ });
+ });
+ // Navegación
+ document.querySelectorAll('.menu-navegacion .btn').forEach(btn => {
+ btn.addEventListener('click', function() {
+ document.querySelectorAll('.menu-navegacion .btn').forEach(b => {
+ b.className = b.className.replace('btn-lila', 'btn-secundario');
+ });
+ this.className = this.className.replace('btn-secundario', 'btn-lila');
+ });
+ });
+ </script>
+</body>
+</html>
